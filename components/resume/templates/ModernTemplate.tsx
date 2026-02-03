@@ -35,7 +35,6 @@ export function ModernTemplate({ data }: { data: ResumeData }) {
                 .join("  •  ")}
             </p>
           </div>
-          <div className="hidden h-14 w-14 shrink-0 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-500 sm:block" />
         </header>
 
         {basics.summary?.trim() ? (
