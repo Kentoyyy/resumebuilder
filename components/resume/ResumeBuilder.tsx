@@ -50,8 +50,8 @@ const templateMeta: Record<
   harvard: { label: "Harvard", description: "Classic, minimal, ATS-friendly" },
   modern: { label: "Modern", description: "Contemporary cards + clean layout" },
   "classic-photo": {
-    label: "Classic w/ Photo",
-    description: "Old-school header with photo on the right",
+    label: "Classic",
+    description: "Traditional layout with optional photo on the right",
   },
 };
 
@@ -241,9 +241,7 @@ export function ResumeBuilder() {
                     <SelectItem value="modern">
                       {templateMeta.modern.label}
                     </SelectItem>
-                    <SelectItem value="classic-photo">
-                      {templateMeta["classic-photo"].label}
-                    </SelectItem>
+                    <SelectItem value="classic-photo">{templateMeta["classic-photo"].label}</SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="mt-1 text-xs text-muted-foreground">
@@ -373,36 +371,38 @@ export function ResumeBuilder() {
                           }
                         />
                       </div>
-                      <div className="space-y-2 sm:col-span-2">
-                        <Label>Photo (optional)</Label>
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          className="cursor-pointer"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) {
-                              setData((d) => ({
-                                ...d,
-                                basics: { ...d.basics, photoUrl: "" },
-                              }));
-                              return;
-                            }
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                              const result = event.target?.result as
-                                | string
-                                | null;
-                              if (!result) return;
-                              setData((d) => ({
-                                ...d,
-                                basics: { ...d.basics, photoUrl: result },
-                              }));
-                            };
-                            reader.readAsDataURL(file);
-                          }}
-                        />
-                      </div>
+                      {template === "classic-photo" && (
+                        <div className="space-y-2 sm:col-span-2">
+                          <Label>Photo (optional)</Label>
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            className="cursor-pointer"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) {
+                                setData((d) => ({
+                                  ...d,
+                                  basics: { ...d.basics, photoUrl: "" },
+                                }));
+                                return;
+                              }
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                const result = event.target?.result as
+                                  | string
+                                  | null;
+                                if (!result) return;
+                                setData((d) => ({
+                                  ...d,
+                                  basics: { ...d.basics, photoUrl: result },
+                                }));
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   </TabsContent>
 
