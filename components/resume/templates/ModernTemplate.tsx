@@ -36,7 +36,7 @@ export function ModernTemplate({ data }: { data: ResumeData }) {
             </p>
           </div>
           {basics.photoUrl ? (
-            <div className="flex shrink-0 items-center justify-center">
+            <div className="flex shrink-0 items-start justify-center pt-1">
               <div className="relative h-16 w-16 overflow-hidden border border-zinc-200 bg-zinc-50 sm:h-20 sm:w-20">
                 {/^https?:\/\//.test(basics.photoUrl) ||
                 basics.photoUrl.startsWith("data:") ? (

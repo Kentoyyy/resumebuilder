@@ -88,6 +88,29 @@ function A4Frame({
   );
 }
 
+function ExportFrame({
+  children,
+  rootRef,
+}: {
+  children: React.ReactNode;
+  rootRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  return (
+    <div className="pointer-events-none absolute left-[-9999px] top-0 h-0 w-0 overflow-hidden">
+      <div
+        ref={rootRef}
+        style={{
+          width: 794,
+          minHeight: 1123,
+          background: "white",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 async function downloadPdfFromElement(el: HTMLElement, filename: string) {
   const dataUrl = await toPng(el, {
     cacheBust: true,
@@ -158,6 +181,7 @@ export function ResumeBuilder() {
   const [downloading, setDownloading] = React.useState(false);
 
   const previewRef = React.useRef<HTMLDivElement | null>(null);
+  const exportRef = React.useRef<HTMLDivElement | null>(null);
 
   const Template =
     template === "harvard"
@@ -175,13 +199,13 @@ export function ResumeBuilder() {
   );
 
   async function onDownload() {
-    if (!previewRef.current) return;
+    if (!exportRef.current) return;
     try {
       setDownloading(true);
       const name = (data.basics.fullName || "resume")
         .trim()
         .replace(/\s+/g, "_");
-      await downloadPdfFromElement(previewRef.current, `${name}.pdf`);
+      await downloadPdfFromElement(exportRef.current, `${name}.pdf`);
     } finally {
       setDownloading(false);
     }
@@ -354,6 +378,7 @@ export function ResumeBuilder() {
                         <Input
                           type="file"
                           accept="image/*"
+                          className="cursor-pointer"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (!file) {
@@ -1168,6 +1193,10 @@ export function ResumeBuilder() {
             <A4Frame rootRef={previewRef}>
               <Template data={data} />
             </A4Frame>
+
+            <ExportFrame rootRef={exportRef}>
+              <Template data={data} />
+            </ExportFrame>
           </div>
         </div>
       </div>
